@@ -4,7 +4,7 @@
     // margin: auto;
     text-align: center;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 3rem;
     margin: 3rem 0;
     width: 600px;
     height: 600px;
@@ -12,4 +12,13 @@
     background: #4A1804;
     position: relative;
     left: 100px;
+    // vertical-align: text-bottom;
+}
+
+.paraIng {
+    // display: inline-block;
+    position: absolute;
+    top: 180px;
+    left: 10px;
+    color: #fff;
 }
