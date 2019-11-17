@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin: 5px 0;
+    // margin: 5px 0;
+    margin-right: .8rem;
 
     // &:not(:last-child) {
     //     margin-bottom: 10px;
@@ -64,6 +65,5 @@
 
     &__checkbox:checked+&__label &__button &__icon {
         opacity: 1;
-        transform: scale(1);
     }
 }

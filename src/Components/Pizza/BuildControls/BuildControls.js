@@ -13,8 +13,11 @@ const items = [
 
 const buildControls = (props) => (
     <div className={classes.BuildControls}>
-        <h2 className={classes.BuildControls__header}>Start adding all the good stuff...</h2>
-        {items.map(item => <BuildControl label={item.label} key={item.label} type={item.type} />)}
+        <p className={classes.BuildControls__price}>Current Price: <strong>{props.price} TK</strong></p>
+        <div className={classes.BuildControls__ingredients}>
+            {items.map(item => <BuildControl label={item.label} key={item.label} type={item.type} checkIng={props.checkIngredients} />)}
+        </div>
+        <button className={classes.OrderButton} disabled={!props.isDisabled} onClick={props.ordered} >ORDER NOW</button>
     </div>
 );
 
