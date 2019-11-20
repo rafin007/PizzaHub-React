@@ -1,0 +1,14 @@
+.NavigationItems {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-items: center;
+    height: 100%;
+}
+
+@media (max-width: 500px) {
+    .NavigationItems {
+        flex-direction: column;
+    }
+}

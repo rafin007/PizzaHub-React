@@ -44,6 +44,10 @@ class PizzaBuilder extends Component {
         this.setState({ ordered: false });
     }
 
+    orderContinuedHandler = () => {
+        alert("You continued!");
+    }
+
     ingredientsChangedHandler = (event, type) => {
         const ingredients = { ...this.state.ingredients };
         let totalPrice = this.state.totalPrice;
@@ -67,7 +71,7 @@ class PizzaBuilder extends Component {
         return (
             <Fragment>
                 <Modal show={this.state.ordered} modalClosed={this.orderCanceledHandler} >
-                    <OrderSummary ingredients={this.state.ingredients} pricing={INGREDIENTS_PRICE} />
+                    <OrderSummary ingredients={this.state.ingredients} pricing={INGREDIENTS_PRICE} cancelled={this.orderCanceledHandler} advanced={this.orderContinuedHandler} price={this.state.totalPrice} />
                 </Modal>
                 <Pizza ingredients={this.state.ingredients} />
                 <BuildControls checkIngredients={this.ingredientsChangedHandler} price={this.state.totalPrice} isDisabled={this.state.purchasable} ordered={this.isOrderedHandler} />
