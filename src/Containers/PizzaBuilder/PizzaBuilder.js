@@ -5,6 +5,7 @@ import BuildControls from '../../Components/Pizza/BuildControls/BuildControls';
 import Modal from '../../Components/UI/Modal/Modal';
 import OrderSummary from '../../Components/Pizza/OrderSummary/OrderSummary';
 import Spinner from '../../Components/UI/Spinner/Spinner';
+import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 
 import axios from '../../axios-orders';
 
@@ -41,6 +42,7 @@ class PizzaBuilder extends Component {
 
     isOrderedHandler = () => {
         this.setState({ ordered: true });
+        console.log(this.state.ingredients)
     }
 
     orderCanceledHandler = () => {
@@ -48,19 +50,30 @@ class PizzaBuilder extends Component {
     }
 
     orderContinuedHandler = () => {
-        this.setState({ loading: true });
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                street: 'Mullholand Drive 321st',
-                country: 'United States',
-                zipCode: '2313'
-            },
-            deliveryMethod: 'fastest'
-        };
+        // this.setState({ loading: true });
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         street: 'Mullholand Drive 321st',
+        //         country: 'United States',
+        //         zipCode: '2313'
+        //     },
+        //     deliveryMethod: 'fastest'
+        // };
 
-        axios.post('/orders.json', order).then(response => this.setState({ loading: false, ordered: false })).catch(error => this.setState({ loading: false, ordered: false }));
+        // axios.post('/orders.json', order).then(response => this.setState({ loading: false, ordered: false })).catch(error => this.setState({ loading: false, ordered: false }));
+
+        const queryParams = [];
+        for (let ing in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(ing) + '=' + encodeURIComponent(this.state.ingredients[ing]));
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: `?${queryString}`
+        });
+
     }
 
     ingredientsChangedHandler = (event, type) => {
@@ -104,4 +117,4 @@ class PizzaBuilder extends Component {
     }
 }
 
-export default PizzaBuilder;
+export default ErrorHandler(PizzaBuilder, axios);
