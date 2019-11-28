@@ -5,8 +5,8 @@ import classes from './NavigationItems.scss';
 
 const navigationItems = (props) => (
     <ul className={classes.NavigationItems}>
-        <NavigationItem link="/" >Pizza</NavigationItem>
-        <NavigationItem link="/checkout" >Checkout</NavigationItem>
+        <NavigationItem link="/" exact >Pizza</NavigationItem>
+        <NavigationItem link="/orders" >Orders</NavigationItem>
     </ul>
 );
 

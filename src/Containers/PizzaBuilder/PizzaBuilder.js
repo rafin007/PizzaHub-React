@@ -42,7 +42,6 @@ class PizzaBuilder extends Component {
 
     isOrderedHandler = () => {
         this.setState({ ordered: true });
-        console.log(this.state.ingredients)
     }
 
     orderCanceledHandler = () => {
@@ -50,24 +49,11 @@ class PizzaBuilder extends Component {
     }
 
     orderContinuedHandler = () => {
-        // this.setState({ loading: true });
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         street: 'Mullholand Drive 321st',
-        //         country: 'United States',
-        //         zipCode: '2313'
-        //     },
-        //     deliveryMethod: 'fastest'
-        // };
-
-        // axios.post('/orders.json', order).then(response => this.setState({ loading: false, ordered: false })).catch(error => this.setState({ loading: false, ordered: false }));
-
         const queryParams = [];
         for (let ing in this.state.ingredients) {
             queryParams.push(encodeURIComponent(ing) + '=' + encodeURIComponent(this.state.ingredients[ing]));
         }
+        queryParams.push('price=' + this.state.totalPrice);
         const queryString = queryParams.join('&');
         this.props.history.push({
             pathname: '/checkout',

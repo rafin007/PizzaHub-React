@@ -1,0 +1,15 @@
+.ContactData {
+    margin: 0 auto;
+    margin-top: 5rem;
+    text-align: center;
+    width: 50rem;
+    border: 1px solid #eee;
+    margin-bottom: 2rem;
+    box-shadow: 0 .3rem .5rem rgba(#ccc, .5);
+}
+
+@media (max-width: 600px) {
+    .ContactData {
+        width: 80%;
+    }
+}
