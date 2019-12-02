@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions';
 
 import Pizza from '../../Components/Pizza/Pizza';
 import BuildControls from '../../Components/Pizza/BuildControls/BuildControls';
@@ -9,36 +11,13 @@ import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 
 import axios from '../../axios-orders';
 
-const INGREDIENTS_PRICE = {
-    tomatoes: 50,
-    vegies: 70,
-    corns: 40,
-    mushrooms: 120,
-    onions: 150
-};
-
 class PizzaBuilder extends Component {
 
     state = {
-        ingredients: {
-            tomatoes: false,
-            vegies: false,
-            corns: false,
-            mushrooms: false,
-            onions: false
-        },
-        totalPrice: 400,
         purchasable: false,
         ordered: false,
         loading: false
     };
-
-    checkPurchasableHandler = (ingredients) => {
-        const allValue = Object.values(ingredients);
-        const isPurchasable = allValue.map(value => value ? 1 : 0).reduce((sum, el) => { return sum + el }, 0);
-
-        this.setState({ purchasable: isPurchasable > 0 });
-    }
 
     isOrderedHandler = () => {
         this.setState({ ordered: true });
@@ -62,29 +41,10 @@ class PizzaBuilder extends Component {
 
     }
 
-    ingredientsChangedHandler = (event, type) => {
-        const ingredients = { ...this.state.ingredients };
-        let totalPrice = this.state.totalPrice;
-
-        if (event.target.checked) {
-            ingredients[type] = true;
-            totalPrice += INGREDIENTS_PRICE[type];
-        }
-        else {
-            ingredients[type] = false;
-            totalPrice -= INGREDIENTS_PRICE[type];
-        }
-
-        this.checkPurchasableHandler(ingredients);
-
-        this.setState({ ingredients, totalPrice });
-        // console.log(this.state.totalPrice);
-    }
-
     render() {
 
         let orderSummary = (
-            <OrderSummary ingredients={this.state.ingredients} pricing={INGREDIENTS_PRICE} cancelled={this.orderCanceledHandler} advanced={this.orderContinuedHandler} price={this.state.totalPrice} />
+            <OrderSummary ingredients={this.props.ings} cancelled={this.orderCanceledHandler} advanced={this.orderContinuedHandler} price={this.props.price} />
         );
 
         if (this.state.loading) {
@@ -96,11 +56,26 @@ class PizzaBuilder extends Component {
                 <Modal show={this.state.ordered} modalClosed={this.orderCanceledHandler} >
                     {orderSummary}
                 </Modal>
-                <Pizza ingredients={this.state.ingredients} />
-                <BuildControls checkIngredients={this.ingredientsChangedHandler} price={this.state.totalPrice} isDisabled={this.state.purchasable} ordered={this.isOrderedHandler} />
+                <Pizza ingredients={this.props.ings} />
+                <BuildControls checkIngredients={this.props.onIngredientChanged} price={this.props.price} abcd={this.props.isPurchasable(this.props.ings)} isDisabled={this.props.purchasable} ordered={this.isOrderedHandler} />
             </Fragment>
         );
     }
 }
 
-export default ErrorHandler(PizzaBuilder, axios);
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice,
+        purchasable: state.purchasable
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onIngredientChanged: (event, ingName) => dispatch({ type: actionTypes.INGREDIENT_CHANGED, event, ingredientName: ingName }),
+        isPurchasable: (ingredients) => dispatch({ type: actionTypes.IS_PURCHASABLE, ingredients })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorHandler(PizzaBuilder, axios));

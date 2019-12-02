@@ -4,23 +4,40 @@ import classes from './Input.scss';
 const input = (props) => {
 
     let inputElement = null;
+    const inputClasses = [classes.InputElement];
+
+    if (props.invalid && props.touched) {
+        inputClasses.push(classes.invalid);
+    }
 
     switch (props.elementType) {
         case 'input':
             inputElement = (
-                <input className={classes.InputElement} type="text" {...props.elementConfig} value={props.value} />
+                <input className={inputClasses.join(' ')} type="text" {...props.elementConfig} value={props.value} onChange={props.changed} />
             );
             break;
 
         case 'textArea':
             inputElement = (
-                <input className={classes.InputElement} type="textarea" {...props.elementConfig} value={props.value} />
+                <input className={inputClasses.join(' ')} type="textarea" {...props.elementConfig} value={props.value} onChange={props.changed} />
+            );
+            break;
+
+        case 'select':
+            inputElement = (
+                <select className={inputClasses.join(' ')} value={props.method.value} onChange={props.changed} >
+                    {props.method.options.map(option => (
+                        <option key={option.value} value={option.value} >
+                            {option.displayValue}
+                        </option>
+                    ))}
+                </select>
             );
             break;
 
         default:
             inputElement = (
-                <input className={classes.InputElement} type="text" {...props.elementConfig} value={props.value} />
+                <input className={inputClasses.join(' ')} type="text" {...props.elementConfig} value={props.value} onChange={props.changed} />
             );
     }
 

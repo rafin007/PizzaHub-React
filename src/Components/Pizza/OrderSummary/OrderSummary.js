@@ -2,6 +2,8 @@ import React from 'react';
 import classes from './OrderSummary.scss';
 import Button from '../../UI/Button/Button';
 
+import { connect } from 'react-redux';
+
 const orderSummary = (props) => {
 
     const finalIngredients = [];
@@ -12,10 +14,10 @@ const orderSummary = (props) => {
         }
     });
 
-    const filtered = Object.keys(props.pricing)
+    const filtered = Object.keys(props.ingPrices)
         .filter(key => finalIngredients.includes(key))
         .reduce((obj, key) => {
-            obj[key] = props.pricing[key];
+            obj[key] = props.ingPrices[key];
             return obj;
         }, {});
 
@@ -36,4 +38,10 @@ const orderSummary = (props) => {
     );
 }
 
-export default orderSummary;
+const mapStateToProps = state => {
+    return {
+        ingPrices: state.INGREDIENTS_PRICE
+    }
+}
+
+export default connect(mapStateToProps)(orderSummary);
