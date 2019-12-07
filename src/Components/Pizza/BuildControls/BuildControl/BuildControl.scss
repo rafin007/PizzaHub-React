@@ -24,21 +24,6 @@
         position: relative;
         top: 9px;
         left: 0;
-
-        // flex: 0 0 1;
-
-        // &::after {
-        //     content: "";
-        //     position: absolute;
-        //     top: 50%;
-        //     left: 50%;
-        //     transform: translate(-50%, -50%);
-        //     height: 15px;
-        //     width: 15px;
-        //     background-color: green;
-        //     display: block;
-        //     opacity: 0;
-        // }
     }
 
     &__label {
@@ -65,5 +50,23 @@
 
     &__checkbox:checked+&__label &__button &__icon {
         opacity: 1;
+    }
+}
+
+@media (max-width: 500px) {
+    .BuildControl {
+        &__button {
+            width: 3.5rem;
+            height: 3.5rem;
+        }
+
+        &__item {
+            font-size: 2rem;
+        }
+
+        &__icon {
+            height: 3.5rem;
+            width: 3.5rem;
+        }
     }
 }

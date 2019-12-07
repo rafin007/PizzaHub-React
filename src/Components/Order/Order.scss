@@ -5,6 +5,8 @@
     padding: 1rem;
     margin: 1rem auto;
     text-align: left;
+    background-color: #eee;
+    box-shadow: 0 5px 5px rgba(#000, .5);
 
     &__span {
         display: inline-block;
@@ -13,5 +15,11 @@
         padding: 10px;
         box-shadow: 0 2px 3px rgba(#000, .5);
         text-transform: capitalize;
+    }
+}
+
+@media(max-width: 500px) {
+    .Order {
+        font-size: 2rem;
     }
 }

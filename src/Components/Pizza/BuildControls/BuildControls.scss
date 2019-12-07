@@ -6,7 +6,6 @@
     box-shadow: 0 6px 20px black;
     margin: 10px 0;
     padding: 10px 0;
-    height: 15rem;
 
     &__ingredients {
         display: flex;
@@ -65,8 +64,17 @@
     }
 }
 
-// @media (max-width: 780px) {
-//     .BuildControls {
-//         width: 200%;
-//     }
-// }
+@media (max-width: 500px) {
+    .BuildControls {
+        margin-top: 4rem;
+        font-size: 2rem;
+
+        &__price {
+            font-size: 2.5rem;
+        }
+    }
+
+    .OrderButton {
+        margin-bottom: 1.5rem;
+    }
+}

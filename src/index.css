@@ -8,6 +8,7 @@ body {
   font-size: 62.5%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ccc;
 }
 
 * {
@@ -18,11 +19,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-/* @media (max-width: 500px) {
-  body {
-    zoom: -50%;
-    -moz-transform: scale(-2);
-    -moz-transform-origin: 0 0;
-  }
-} */

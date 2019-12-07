@@ -1,4 +1,4 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     ingredients: {
@@ -37,9 +37,7 @@ const reducer = (state = initialState, action) => {
 
         case actionTypes.IS_PURCHASABLE:
             const allValue = Object.values(action.ingredients);
-            console.log(action.ingredients);
             const isPurchasable = allValue.map(value => value ? 1 : 0).reduce((sum, el) => { return sum + el }, 0);
-            console.log(isPurchasable);
             return {
                 ...state,
                 purchasable: isPurchasable > 0

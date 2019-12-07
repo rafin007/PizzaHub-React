@@ -6,7 +6,7 @@ const buildControl = (props) => {
 
     return (
         <div className={classes.BuildControl} >
-            <input className={classes.BuildControl__checkbox} type="checkbox" id={props.type} onChange={(event) => props.checkIng(event, props.type)} />
+            <input className={classes.BuildControl__checkbox} type="checkbox" id={props.type} onChange={(event) => props.checkIng(event, props.type)} checked={props.isChecked} />
 
             <label htmlFor={props.type} className={classes.BuildControl__label} >
                 <span className={classes.BuildControl__button}>

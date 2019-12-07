@@ -1,6 +1,6 @@
-.ContactData {
+.Auth {
     margin: 0 auto;
-    margin-top: 5rem;
+    margin-top: 15rem;
     text-align: center;
     width: 50rem;
     border: 1px solid #eee;
@@ -10,7 +10,7 @@
 }
 
 @media (max-width: 500px) {
-    .ContactData {
+    .Auth {
         width: 80%;
         font-size: 2rem;
     }

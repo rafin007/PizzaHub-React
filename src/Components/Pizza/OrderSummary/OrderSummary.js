@@ -40,7 +40,7 @@ const orderSummary = (props) => {
 
 const mapStateToProps = state => {
     return {
-        ingPrices: state.INGREDIENTS_PRICE
+        ingPrices: state.pizzaBuilder.INGREDIENTS_PRICE
     }
 }
 

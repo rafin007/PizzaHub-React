@@ -13,7 +13,7 @@ const input = (props) => {
     switch (props.elementType) {
         case 'input':
             inputElement = (
-                <input className={inputClasses.join(' ')} type="text" {...props.elementConfig} value={props.value} onChange={props.changed} />
+                <input className={inputClasses.join(' ')} {...props.elementConfig} value={props.value} onChange={props.changed} />
             );
             break;
 
@@ -37,7 +37,7 @@ const input = (props) => {
 
         default:
             inputElement = (
-                <input className={inputClasses.join(' ')} type="text" {...props.elementConfig} value={props.value} onChange={props.changed} />
+                <input className={inputClasses.join(' ')} {...props.elementConfig} value={props.value} onChange={props.changed} />
             );
     }
 

@@ -1,7 +1,10 @@
 import React from 'react';
 import classes from './Order.scss';
+import Button from '../UI/Button/Button';
+import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions/index';
 
-const order = (props) => {
+const Order = (props) => {
 
     const finalIngredients = [];
 
@@ -14,6 +17,10 @@ const order = (props) => {
         }
     }
 
+    // useEffect(() => {
+    //     console.log(props);
+    // });
+
     const outputIngredients = finalIngredients.map(ingredient => {
         return <span className={classes.Order__span} key={ingredient.name}> {ingredient.name}</span>
     });
@@ -22,8 +29,15 @@ const order = (props) => {
         <div className={classes.Order} >
             <p>Ingredients: {outputIngredients}</p>
             <p>Total Price: <strong>{props.price} BDT</strong> </p>
+            <Button clicked={() => props.onDeleteOrder(props.id)} btnType="Danger" >DELETE ORDER</Button>
         </div>
     );
 }
 
-export default order;
+const mapDispatchToProps = dispatch => {
+    return {
+        onDeleteOrder: (id) => dispatch(actionTypes.deleteOrder(id))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Order);

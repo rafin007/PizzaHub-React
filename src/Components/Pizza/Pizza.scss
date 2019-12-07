@@ -5,7 +5,7 @@
     text-align: center;
     font-weight: bold;
     font-size: 3rem;
-    margin-top: 4.3rem;
+    margin-top: 8rem;
     width: 600px;
     height: 600px;
     border-radius: 500px;
@@ -18,7 +18,15 @@
 .paraIng {
     // display: inline-block;
     position: absolute;
-    top: 180px;
-    left: 10px;
+    top: 13rem;
+    left: 5rem;
     color: #fff;
+}
+
+@media (max-width: 500px) {
+    .paraIng {
+        font-size: 4rem;
+        top: 10rem;
+        left: 3rem;
+    }
 }

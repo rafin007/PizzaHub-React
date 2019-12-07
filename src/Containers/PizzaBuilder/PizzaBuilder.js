@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import * as actionTypes from '../../store/actions/index';
 
 import Pizza from '../../Components/Pizza/Pizza';
 import BuildControls from '../../Components/Pizza/BuildControls/BuildControls';
 import Modal from '../../Components/UI/Modal/Modal';
+import Button from '../../Components/UI/Button/Button';
 import OrderSummary from '../../Components/Pizza/OrderSummary/OrderSummary';
-import Spinner from '../../Components/UI/Spinner/Spinner';
 import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 
 import axios from '../../axios-orders';
@@ -15,8 +15,7 @@ class PizzaBuilder extends Component {
 
     state = {
         purchasable: false,
-        ordered: false,
-        loading: false
+        ordered: false
     };
 
     isOrderedHandler = () => {
@@ -28,17 +27,7 @@ class PizzaBuilder extends Component {
     }
 
     orderContinuedHandler = () => {
-        const queryParams = [];
-        for (let ing in this.state.ingredients) {
-            queryParams.push(encodeURIComponent(ing) + '=' + encodeURIComponent(this.state.ingredients[ing]));
-        }
-        queryParams.push('price=' + this.state.totalPrice);
-        const queryString = queryParams.join('&');
-        this.props.history.push({
-            pathname: '/checkout',
-            search: `?${queryString}`
-        });
-
+        this.props.history.push('/checkout');
     }
 
     render() {
@@ -47,15 +36,24 @@ class PizzaBuilder extends Component {
             <OrderSummary ingredients={this.props.ings} cancelled={this.orderCanceledHandler} advanced={this.orderContinuedHandler} price={this.props.price} />
         );
 
-        if (this.state.loading) {
-            orderSummary = <Spinner />;
+        let modal = (
+            <Modal show={this.state.ordered} modalClosed={this.orderCanceledHandler} >
+                {orderSummary}
+            </Modal>
+        );
+
+        if (this.props.successOrder) {
+            modal = (
+                <Modal show={this.props.successOrder} modalClosed={this.props.orderDoneModalClose} >
+                    <p style={{ fontSize: '2rem' }} >Your order has been placed successfully!</p>
+                    <Button style={{ fontSize: '2rem' }} clicked={this.props.orderDoneModalClose} btnType="Success" >OK!</Button>
+                </Modal>
+            );
         }
 
         return (
             <Fragment>
-                <Modal show={this.state.ordered} modalClosed={this.orderCanceledHandler} >
-                    {orderSummary}
-                </Modal>
+                {modal}
                 <Pizza ingredients={this.props.ings} />
                 <BuildControls checkIngredients={this.props.onIngredientChanged} price={this.props.price} abcd={this.props.isPurchasable(this.props.ings)} isDisabled={this.props.purchasable} ordered={this.isOrderedHandler} />
             </Fragment>
@@ -65,16 +63,18 @@ class PizzaBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        purchasable: state.purchasable
+        ings: state.pizzaBuilder.ingredients,
+        price: state.pizzaBuilder.totalPrice,
+        purchasable: state.pizzaBuilder.purchasable,
+        successOrder: state.order.ordered
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientChanged: (event, ingName) => dispatch({ type: actionTypes.INGREDIENT_CHANGED, event, ingredientName: ingName }),
-        isPurchasable: (ingredients) => dispatch({ type: actionTypes.IS_PURCHASABLE, ingredients })
+        onIngredientChanged: (event, ingName) => dispatch(actionTypes.changeIngredient(event, ingName)),
+        isPurchasable: (ingredients) => dispatch(actionTypes.isPurchasable(ingredients)),
+        orderDoneModalClose: () => dispatch(actionTypes.pizzaOrderedModalClosed())
     }
 }
 

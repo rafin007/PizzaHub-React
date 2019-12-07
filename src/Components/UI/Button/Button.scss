@@ -27,3 +27,9 @@
     color: #ccc;
     cursor: not-allowed;
 }
+
+@media(max-width: 500px) {
+    .Button {
+        font-size: 2rem;
+    }
+}

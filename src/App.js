@@ -5,6 +5,7 @@ import Layout from './Components/Layout/Layout';
 import PizzaBuilder from './Containers/PizzaBuilder/PizzaBuilder';
 import Checkout from './Containers/Checkout/Checkout';
 import Orders from './Containers/Orders/Orders';
+import Auth from './Containers/Auth/Auth';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/" exact component={PizzaBuilder} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/orders" component={Orders} />
+      <Route path="/auth" component={Auth} />
     </Layout>
   );
 }

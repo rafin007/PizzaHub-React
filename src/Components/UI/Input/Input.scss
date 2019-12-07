@@ -27,3 +27,29 @@
     border: 1px solid red;
     background-color: rgb(245, 175, 167);
 }
+
+@media(max-width: 500px) {
+    .Input {
+        padding: 1rem 2rem;
+    }
+
+    input[type='text'] {
+        font-size: 1.5rem;
+    }
+
+    input[type='email'] {
+        font-size: 1.5rem;
+    }
+
+    input[type='password'] {
+        font-size: 1.5rem;
+    }
+
+    input[type='select'] {
+        font-size: 1.5rem;
+    }
+
+    select {
+        font-size: 1.5rem;
+    }
+}

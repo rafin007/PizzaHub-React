@@ -6,6 +6,10 @@ import Spinner from '../../Components/UI/Spinner/Spinner';
 import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 import Input from '../../Components/UI/Input/Input';
 
+import * as actionTypes from '../../store/actions/index';
+
+import { connect } from 'react-redux';
+
 class ContactData extends Component {
 
     state = {
@@ -31,6 +35,10 @@ class ContactData extends Component {
             }
         },
         formIsValid: false
+    }
+
+    componentDidMount() {
+        console.log(this.props);
     }
 
     inputConfig(elType, type, placeholder) {
@@ -77,7 +85,6 @@ class ContactData extends Component {
 
     orderConfirmedHandler = (event) => {
         event.preventDefault();
-        this.setState({ loading: true });
 
         const orderDetails = {};
         for (let inputId in this.state.orderForm) {
@@ -90,12 +97,7 @@ class ContactData extends Component {
             orderDetails
         };
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({ loading: false });
-                this.props.history.push('/');
-            })
-            .catch(error => this.setState({ loading: false }));
+        this.props.onOrder(order, this.props.history);
     }
 
 
@@ -110,7 +112,7 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form onSubmit={this.orderConfirmedHandler} className={classes.ContactData__form} >
+            <form onSubmit={this.orderConfirmedHandler} >
 
                 {formElementsArray.map(element => (
                     <Input key={element.id} elementType={element.config.elementType} elementConfig={element.config.elementConfig} method={this.state.orderForm.deliverMethod} changed={(event) => this.inputChangedHandler(event, element.id)} invalid={!element.config.valid} touched={element.config.touched} />
@@ -121,7 +123,7 @@ class ContactData extends Component {
             </form>
         );
 
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />;
         }
 
@@ -134,4 +136,18 @@ class ContactData extends Component {
     }
 }
 
-export default ErrorHandler(ContactData, axios);
+const mapStateToProps = state => {
+    return {
+        ingredients: state.pizzaBuilder.ingredients,
+        price: state.pizzaBuilder.totalPrice,
+        loading: state.order.loading
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrder: (orderData, history) => dispatch(actionTypes.pizzaOrder(orderData, history))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorHandler(ContactData, axios));

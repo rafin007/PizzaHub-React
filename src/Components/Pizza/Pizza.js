@@ -27,7 +27,7 @@ const pizza = (props) => {
         <div className={classes.Pizza}>
 
             <PizzaIngredients type="base" />
-            {pizzaIngredients.length > 0 ? pizzaIngredients.map(ingredient => <PizzaIngredients type={ingredient} key={ingredient} />) : <p className={classes.paraIng}>Please start adding ingredients!</p>}
+            {pizzaIngredients.length > 0 ? pizzaIngredients.map(ingredient => <PizzaIngredients type={ingredient} key={ingredient} />) : <p className={classes.paraIng}>Add ingredients below...</p>}
 
         </div>
     );
