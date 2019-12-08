@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+// import { Redirect } from 'react-router-dom';
+
 import axios from '../../axios-orders';
 import Order from '../../Components/Order/Order';
 import Spinner from '../../Components/UI/Spinner/Spinner';
@@ -12,6 +14,13 @@ import classes from './Orders.scss';
 class Orders extends Component {
 
     componentDidMount() {
+
+        // if (!this.props.isAuth) {
+        //     return (
+        //         <Redirect to="/" />
+        //     );
+        // }
+
         this.props.fetchOrdersAsync();
     }
 
@@ -40,7 +49,8 @@ class Orders extends Component {
 const mapStateToProps = state => {
     return {
         orders: state.order.orders,
-        loading: state.order.loading
+        loading: state.order.loading,
+        isAuth: state.auth.idToken
     }
 }
 

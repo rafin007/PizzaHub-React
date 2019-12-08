@@ -9,13 +9,15 @@ import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import pizzaBuilderReducer from './store/reducers/pizzaBuilder';
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 import { Provider } from 'react-redux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     pizzaBuilder: pizzaBuilderReducer,
-    order: orderReducer
+    order: orderReducer,
+    auth: authReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

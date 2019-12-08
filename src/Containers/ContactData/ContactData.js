@@ -5,6 +5,7 @@ import axios from '../../axios-orders';
 import Spinner from '../../Components/UI/Spinner/Spinner';
 import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 import Input from '../../Components/UI/Input/Input';
+import Modal from '../../Components/UI/Modal/Modal';
 
 import * as actionTypes from '../../store/actions/index';
 
@@ -34,11 +35,8 @@ class ContactData extends Component {
                 ]
             }
         },
-        formIsValid: false
-    }
-
-    componentDidMount() {
-        console.log(this.props);
+        formIsValid: false,
+        showModal: false
     }
 
     inputConfig(elType, type, placeholder) {
@@ -50,7 +48,8 @@ class ContactData extends Component {
             },
             value: elType === 'select' ? 'fastest' : '',
             rules: {
-                required: true
+                required: true,
+                isEmail: type === 'email' ? true : false
             },
             valid: elType === 'select' ? true : false,
             touched: false
@@ -77,14 +76,26 @@ class ContactData extends Component {
 
     checkValidity = (value, rules) => {
         let isValid = true;
+
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
+
+        if (rules.isEmail) {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            isValid = pattern.test(value) && isValid
+        }
+
         return isValid;
     }
 
     orderConfirmedHandler = (event) => {
         event.preventDefault();
+
+        if (!this.props.isAuth) {
+            this.setState({ showModal: true });
+            return;
+        }
 
         const orderDetails = {};
         for (let inputId in this.state.orderForm) {
@@ -100,6 +111,10 @@ class ContactData extends Component {
         this.props.onOrder(order, this.props.history);
     }
 
+    modalClosedHandler = () => {
+        this.setState({ showModal: false });
+    }
+
 
     render() {
 
@@ -113,6 +128,10 @@ class ContactData extends Component {
 
         let form = (
             <form onSubmit={this.orderConfirmedHandler} >
+
+                <Modal show={this.state.showModal} modalClosed={this.modalClosedHandler} >
+                    <p style={{ fontSize: '2rem', color: 'red' }} >Please login to place an order!</p>
+                </Modal>
 
                 {formElementsArray.map(element => (
                     <Input key={element.id} elementType={element.config.elementType} elementConfig={element.config.elementConfig} method={this.state.orderForm.deliverMethod} changed={(event) => this.inputChangedHandler(event, element.id)} invalid={!element.config.valid} touched={element.config.touched} />
@@ -140,7 +159,8 @@ const mapStateToProps = state => {
     return {
         ingredients: state.pizzaBuilder.ingredients,
         price: state.pizzaBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        isAuth: state.auth.idToken
     }
 }
 

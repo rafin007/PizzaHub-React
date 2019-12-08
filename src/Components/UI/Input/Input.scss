@@ -16,6 +16,7 @@
     padding: .6rem 1rem;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 2rem;
 }
 
 .InputElement:focus {
@@ -26,6 +27,11 @@
 .invalid {
     border: 1px solid red;
     background-color: rgb(245, 175, 167);
+}
+
+.valid {
+    border: 1px solid green;
+    background-color: lightgreen;
 }
 
 @media(max-width: 500px) {

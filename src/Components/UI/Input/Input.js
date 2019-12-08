@@ -9,6 +9,9 @@ const input = (props) => {
     if (props.invalid && props.touched) {
         inputClasses.push(classes.invalid);
     }
+    else if (!props.invalid && props.touched) {
+        inputClasses.push(classes.valid);
+    }
 
     switch (props.elementType) {
         case 'input':

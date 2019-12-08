@@ -45,7 +45,7 @@ class PizzaBuilder extends Component {
         if (this.props.successOrder) {
             modal = (
                 <Modal show={this.props.successOrder} modalClosed={this.props.orderDoneModalClose} >
-                    <p style={{ fontSize: '2rem' }} >Your order has been placed successfully!</p>
+                    <p style={{ fontSize: '2rem', color: '#703B09' }} >Your order has been placed successfully!</p>
                     <Button style={{ fontSize: '2rem' }} clicked={this.props.orderDoneModalClose} btnType="Success" >OK!</Button>
                 </Modal>
             );
@@ -66,7 +66,8 @@ const mapStateToProps = state => {
         ings: state.pizzaBuilder.ingredients,
         price: state.pizzaBuilder.totalPrice,
         purchasable: state.pizzaBuilder.purchasable,
-        successOrder: state.order.ordered
+        successOrder: state.order.ordered,
+        token: state.auth.idToken
     }
 }
 

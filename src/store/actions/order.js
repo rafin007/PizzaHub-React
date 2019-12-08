@@ -22,9 +22,9 @@ export const pizzaOrderStart = () => {
 }
 
 export const pizzaOrder = (orderData, history) => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(pizzaOrderStart());
-        axios.post('/orders.json', orderData)
+        axios.post(`/orders.json?auth=${getState().auth.idToken}`, orderData)
             .then(response => {
                 history.push('/');
                 dispatch(pizzaOrderSuccess(response.data));
@@ -60,9 +60,10 @@ export const fetchOrdersFail = (error) => {
 }
 
 export const fetchOrdersAsync = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(fetchOrdersInit());
-        axios.get('/orders.json').then(response => {
+        console.log(getState());
+        axios.get(`/orders.json?auth=${getState().auth.idToken}`).then(response => {
             const fetchedOrders = [];
             for (let key in response.data) {
                 fetchedOrders.push({

@@ -6,6 +6,7 @@ import PizzaBuilder from './Containers/PizzaBuilder/PizzaBuilder';
 import Checkout from './Containers/Checkout/Checkout';
 import Orders from './Containers/Orders/Orders';
 import Auth from './Containers/Auth/Auth';
+import Logout from './Containers/Auth/Logout/Logout';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/orders" component={Orders} />
       <Route path="/auth" component={Auth} />
+      <Route path="/logout" component={Logout} />
     </Layout>
   );
 }

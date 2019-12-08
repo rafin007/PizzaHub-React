@@ -1,15 +1,29 @@
 .Auth {
     margin: 0 auto;
-    margin-top: 15rem;
+    margin-top: 20rem;
     text-align: center;
     width: 50rem;
     border: 1px solid #eee;
     margin-bottom: 2rem;
     box-shadow: 0 .3rem .5rem rgba(#000, .5);
     background-color: #eee;
+    border-radius: 1rem;
+
+
+    &__error {
+        color: red;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    &__success {
+        color: green;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .Auth {
         width: 80%;
         font-size: 2rem;

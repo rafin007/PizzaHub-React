@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './Auth.scss';
 import Button from '../../Components/UI/Button/Button';
 import Input from '../../Components/UI/Input/Input';
+import Spinner from '../../Components/UI/Spinner/Spinner';
 
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
@@ -16,6 +17,13 @@ class Auth extends Component {
             password: {
                 ...this.inputConfig('input', 'password', 'Your Password')
             }
+        },
+        isSignup: true
+    }
+
+    componentDidUpdate() {
+        if (this.props.isAuth) {
+            this.props.history.push("/");
         }
     }
 
@@ -35,6 +43,15 @@ class Auth extends Component {
             valid: false,
             touched: false
         }
+    }
+
+    authSwitchHandler = (event) => {
+        event.preventDefault();
+        this.setState(prevState => {
+            return {
+                isSignup: !prevState.isSignup
+            };
+        })
     }
 
     inputChangedHandler = (event, controlName) => {
@@ -83,7 +100,7 @@ class Auth extends Component {
 
     formSubmitHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup);
     }
 
 
@@ -97,17 +114,35 @@ class Auth extends Component {
             });
         }
 
+        let errorMessage = null;
+        let signUpMessage = null;
+
+        if (this.state.isSignup && this.props.kind) {
+            signUpMessage = <p className={classes.Auth__success} >Account created successfully!</p>;
+        }
+
+        if (this.props.error) {
+            errorMessage = <p className={classes.Auth__error} >{this.props.error.replace(/_/g, ' ')}</p>;
+        }
+
         let form = (
             <form onSubmit={this.formSubmitHandler} >
-                <h2>Please login with your credentials</h2>
+                <h2 style={{ 'color': '#703B09' }} >{this.state.isSignup ? "Signup to order!" : "Please login with your credentials"}</h2>
                 {formElementsArray.map(element => (
                     <Input key={element.id} elementType={element.config.elementType} elementConfig={element.config.elementConfig} changed={(event) => this.inputChangedHandler(event, element.id)} invalid={!element.config.valid} touched={element.config.touched} />
                 ))}
+                {errorMessage}
+                {signUpMessage}
 
-                <Button btnType="Success" >LOGIN</Button>
+                <Button btnType="Success" >SUBMIT</Button>
+                <Button btnType="Danger" clicked={this.authSwitchHandler} >{this.state.isSignup ? 'SWITCH TO SIGNIN' : 'SWITCH TO SIGNUP'}</Button>
 
             </form>
         );
+
+        if (this.props.loading) {
+            form = <Spinner />;
+        }
 
         return (
             <div className={classes.Auth} >
@@ -117,10 +152,19 @@ class Auth extends Component {
     }
 }
 
-const mapPropsToDispatch = dispatch => {
+const mapStateToProps = state => {
     return {
-        onAuth: (email, password) => dispatch(actions.auth(email, password))
+        loading: state.auth.loading,
+        error: state.auth.error,
+        kind: state.auth.kind,
+        isAuth: state.auth.idToken
     }
 }
 
-export default connect(null, mapPropsToDispatch)(Auth);
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

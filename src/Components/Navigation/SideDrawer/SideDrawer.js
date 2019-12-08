@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import NavigationItems from '../NavigationItems/NavigationItems';
 import BackDrop from '../../UI/Backdrop/Backdrop';
@@ -22,7 +23,9 @@ const sideDrawer = (props) => {
             <div className={attachedClasses.join(' ')}>
                 <div className={classes.items}>
                     <div className={classes.Logo}>
-                        <Logo />
+                        <NavLink to="/" >
+                            <Logo />
+                        </NavLink>
                     </div>
                     <nav>
                         <NavigationItems />

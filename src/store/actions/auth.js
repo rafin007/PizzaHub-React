@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as actionTypes from './actionTypes';
 
 export const authStart = () => {
@@ -6,10 +7,18 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (authData) => {
+export const authSigninSuccess = (idToken, userId) => {
     return {
-        type: actionTypes.AUTH_SUCCESS,
-        authData
+        type: actionTypes.AUTH_SIGN_IN_SUCCESS,
+        idToken,
+        userId
+    };
+};
+
+export const authSignupSuccess = (kind) => {
+    return {
+        type: actionTypes.AUTH_SIGN_UP_SUCCESS,
+        kind
     };
 };
 
@@ -20,10 +29,42 @@ export const authFail = (error) => {
     };
 };
 
-export const auth = (email, password) => {
-    console.log(email, password);
+export const logout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    };
+};
+
+export const checkAuthTimeout = (expirationTime) => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(logout());
+        }, expirationTime * 1000);
+    };
+};
+
+export const auth = (email, password, isSignup) => {
     return dispatch => {
         dispatch(authStart());
-        //auth req
-    }
-}
+        const authData = {
+            email,
+            password,
+            returnSecureToken: true
+        };
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCHlBiGsJSOFL4ALW-DVwV8yG255K7Z7gw';
+        if (!isSignup) {
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCHlBiGsJSOFL4ALW-DVwV8yG255K7Z7gw';
+        }
+        axios.post(url, authData).then(response => {
+            if (isSignup) {
+                dispatch(authSignupSuccess(response.data.kind));
+            }
+            else {
+                dispatch(authSigninSuccess(response.data.idToken, response.data.localId));
+                dispatch(checkAuthTimeout(response.data.expiresIn));
+            }
+        }).catch(error => {
+            dispatch(authFail(error.response.data.error.message));
+        });
+    };
+};
