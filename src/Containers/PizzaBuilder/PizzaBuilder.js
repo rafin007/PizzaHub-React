@@ -19,7 +19,12 @@ class PizzaBuilder extends Component {
     };
 
     isOrderedHandler = () => {
-        this.setState({ ordered: true });
+        if (this.props.auth) {
+            this.setState({ ordered: true });
+        }
+        else {
+            this.props.history.push('/signup');
+        }
     }
 
     orderCanceledHandler = () => {
@@ -45,7 +50,7 @@ class PizzaBuilder extends Component {
         if (this.props.successOrder) {
             modal = (
                 <Modal show={this.props.successOrder} modalClosed={this.props.orderDoneModalClose} >
-                    <p style={{ fontSize: '2rem', color: '#703B09' }} >Your order has been placed successfully!</p>
+                    <p style={{ fontSize: '2rem', color: '#703B09' }} >Order successful, you may view them in the orders tab!</p>
                     <Button style={{ fontSize: '2rem' }} clicked={this.props.orderDoneModalClose} btnType="Success" >OK!</Button>
                 </Modal>
             );
@@ -67,7 +72,7 @@ const mapStateToProps = state => {
         price: state.pizzaBuilder.totalPrice,
         purchasable: state.pizzaBuilder.purchasable,
         successOrder: state.order.ordered,
-        token: state.auth.idToken
+        auth: state.auth.idToken
     }
 }
 

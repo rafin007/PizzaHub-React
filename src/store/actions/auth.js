@@ -30,6 +30,7 @@ export const authFail = (error) => {
 };
 
 export const logout = () => {
+    localStorage.clear();
     return {
         type: actionTypes.AUTH_LOGOUT
     };
@@ -60,6 +61,11 @@ export const auth = (email, password, isSignup) => {
                 dispatch(authSignupSuccess(response.data.kind));
             }
             else {
+                const expiresIn = +response.data.expiresIn;
+                const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+                localStorage.setItem('token', response.data.idToken);
+                localStorage.setItem('userId', response.data.localId);
+                localStorage.setItem('expirationDate', expirationDate);
                 dispatch(authSigninSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             }
@@ -68,3 +74,30 @@ export const auth = (email, password, isSignup) => {
         });
     };
 };
+
+export const authCheckState = () => {
+    return dispatch => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            dispatch(logout());
+        }
+        else {
+            const userId = localStorage.getItem('userId');
+            const expirationDate = new Date(localStorage.getItem('expirationDate'));
+
+            if (new Date() > expirationDate) {
+                dispatch(logout());
+            }
+            else {
+                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
+                dispatch(authSigninSuccess(token, userId));
+            }
+        }
+    }
+};
+
+export const clearSignupKind = () => {
+    return {
+        type: actionTypes.CLEAR_SIGNUP_KIND
+    }
+}

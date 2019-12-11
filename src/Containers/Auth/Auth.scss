@@ -1,6 +1,6 @@
 .Auth {
     margin: 0 auto;
-    margin-top: 20rem;
+    margin-top: 13rem;
     text-align: center;
     width: 50rem;
     border: 1px solid #eee;
@@ -23,9 +23,36 @@
     }
 }
 
+.SwitchLink {
+    font-size: 1.2rem;
+    color: #703B09;
+    font-weight: 300;
+}
+
+.SwitchLink a,
+.SwitchLink a:active {
+    text-decoration: none;
+    background-color: #703B09;
+    margin-left: .7rem;
+    padding: .5rem;
+    border-radius: 100px;
+    color: #fff;
+    transition: all .2s;
+}
+
+.SwitchLink a:hover {
+    background-color: #40A4CB;
+    color: #fff;
+}
+
 @media (max-width: 600px) {
     .Auth {
         width: 80%;
+        font-size: 2rem;
+        margin-top: 20rem;
+    }
+
+    .SwitchLink {
         font-size: 2rem;
     }
 }

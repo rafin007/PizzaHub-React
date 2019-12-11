@@ -4,6 +4,9 @@ import Button from '../../Components/UI/Button/Button';
 import Input from '../../Components/UI/Input/Input';
 import Spinner from '../../Components/UI/Spinner/Spinner';
 
+import { Link } from 'react-router-dom';
+import { checkValidity } from '../Validation/Validation';
+
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 
@@ -15,15 +18,15 @@ class Auth extends Component {
                 ...this.inputConfig('input', 'email', 'Your Email')
             },
             password: {
-                ...this.inputConfig('input', 'password', 'Your Password')
+                ...this.inputConfig('input', 'password', 'New Password')
             }
         },
         isSignup: true
     }
 
     componentDidUpdate() {
-        if (this.props.isAuth) {
-            this.props.history.push("/");
+        if (this.props.kind) {
+            this.props.history.push("/signin");
         }
     }
 
@@ -45,15 +48,6 @@ class Auth extends Component {
         }
     }
 
-    authSwitchHandler = (event) => {
-        event.preventDefault();
-        this.setState(prevState => {
-            return {
-                isSignup: !prevState.isSignup
-            };
-        })
-    }
-
     inputChangedHandler = (event, controlName) => {
         const updatedControls = {
             ...this.state.controls,
@@ -61,41 +55,10 @@ class Auth extends Component {
                 ...this.state.controls[controlName],
                 value: event.target.value,
                 touched: true,
-                valid: this.checkValidity(event.target.value, this.state.controls[controlName].rules)
+                valid: checkValidity(event.target.value, this.state.controls[controlName].rules)
             }
         }
         this.setState({ controls: updatedControls });
-    }
-
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid
-        }
-
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        if (rules.isNumeric) {
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        return isValid;
     }
 
     formSubmitHandler = (event) => {
@@ -117,8 +80,8 @@ class Auth extends Component {
         let errorMessage = null;
         let signUpMessage = null;
 
-        if (this.state.isSignup && this.props.kind) {
-            signUpMessage = <p className={classes.Auth__success} >Successful! Switch to SIGNIN to Login</p>;
+        if (this.props.kind) {
+            signUpMessage = <p className={classes.Auth__success} >Account created successfully!</p>;
         }
 
         if (this.props.error) {
@@ -127,7 +90,7 @@ class Auth extends Component {
 
         let form = (
             <form onSubmit={this.formSubmitHandler} >
-                <h2 style={{ 'color': '#703B09' }} >{this.state.isSignup ? "Create an account!" : "Please login with your credentials"}</h2>
+                <h2 style={{ 'color': '#703B09' }} >Create an account!</h2>
                 {formElementsArray.map(element => (
                     <Input key={element.id} elementType={element.config.elementType} elementConfig={element.config.elementConfig} changed={(event) => this.inputChangedHandler(event, element.id)} invalid={!element.config.valid} touched={element.config.touched} />
                 ))}
@@ -135,7 +98,6 @@ class Auth extends Component {
                 {signUpMessage}
 
                 <Button btnType="Success" >SUBMIT</Button>
-                <Button btnType="Danger" clicked={this.authSwitchHandler} >{this.state.isSignup ? 'SWITCH TO SIGNIN' : 'SWITCH TO SIGNUP'}</Button>
 
             </form>
         );
@@ -147,6 +109,11 @@ class Auth extends Component {
         return (
             <div className={classes.Auth} >
                 {form}
+                {/* <Button btnType="Danger" clicked={this.switchToSignin} >Already got one? Sign in</Button> */}
+                <p className={classes.SwitchLink}>
+                    Already got one?
+                    <Link to="/signin" >Sign in</Link>
+                </p>
             </div>
         );
     }

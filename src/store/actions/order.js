@@ -62,8 +62,7 @@ export const fetchOrdersFail = (error) => {
 export const fetchOrdersAsync = () => {
     return (dispatch, getState) => {
         dispatch(fetchOrdersInit());
-        console.log(getState());
-        axios.get(`/orders.json?auth=${getState().auth.idToken}`).then(response => {
+        axios.get(`/orders.json?auth=${getState().auth.idToken}&orderBy="userId"&equalTo="${getState().auth.userId}"`).then(response => {
             const fetchedOrders = [];
             for (let key in response.data) {
                 fetchedOrders.push({
@@ -99,8 +98,8 @@ export const deleteOrderFail = (error) => {
 }
 
 export const deleteOrder = (id) => {
-    return dispatch => {
-        axios.delete(`/orders/${id}.json`).then(response => {
+    return (dispatch, getState) => {
+        axios.delete(`/orders/${id}.json?auth=${getState().auth.idToken}`).then(response => {
             dispatch(deleteOrderSuccess(id));
         }).catch(error => {
             dispatch(deleteOrderFail(error));

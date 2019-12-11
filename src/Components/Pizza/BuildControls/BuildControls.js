@@ -18,13 +18,14 @@ const buildControls = (props) => (
         <div className={classes.BuildControls__ingredients}>
             {items.map(item => <BuildControl label={item.label} key={item.label} type={item.type} checkIng={props.checkIngredients} isChecked={props.ings[item.type]} />)}
         </div>
-        <button className={classes.OrderButton} disabled={!props.isDisabled} onClick={props.ordered} >ORDER NOW</button>
+        <button className={classes.OrderButton} disabled={!props.isDisabled} onClick={props.ordered} >{props.auth ? 'ORDER NOW' : 'SIGN IN TO ORDER'}</button>
     </div>
 );
 
 const mapStateToProps = state => {
     return {
-        ings: state.pizzaBuilder.ingredients
+        ings: state.pizzaBuilder.ingredients,
+        auth: state.auth.idToken
     };
 }
 

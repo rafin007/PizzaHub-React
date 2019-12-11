@@ -33,6 +33,12 @@ const reducer = (state = initialState, action) => {
                 kind: action.kind
             }
 
+        case actionTypes.CLEAR_SIGNUP_KIND:
+            return {
+                ...state,
+                kind: null
+            }
+
         case actionTypes.AUTH_FAIL:
             return {
                 ...state,

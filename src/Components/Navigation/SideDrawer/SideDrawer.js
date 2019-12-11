@@ -20,7 +20,7 @@ const sideDrawer = (props) => {
     return (
         <Fragment>
             <BackDrop show={props.show} clicked={props.open} />
-            <div className={attachedClasses.join(' ')}>
+            <div className={attachedClasses.join(' ')} onClick={props.open} >
                 <div className={classes.items}>
                     <div className={classes.Logo}>
                         <NavLink to="/" >

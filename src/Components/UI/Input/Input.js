@@ -30,7 +30,7 @@ const input = (props) => {
             inputElement = (
                 <select className={inputClasses.join(' ')} value={props.method.value} onChange={props.changed} >
                     {props.method.options.map(option => (
-                        <option key={option.value} value={option.value} >
+                        <option key={option.value} value={option.value} disabled={option.disabled} hidden={option.hidden} >
                             {option.displayValue}
                         </option>
                     ))}

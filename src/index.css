@@ -10,7 +10,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #ccc;
 
-  padding: env(safe-area-inset, 0px);
+  /* padding: env(safe-area-inset, 0px); */
+  /* -webkit-min-device-pixel-ratio: 1 */
 }
 
 * {

@@ -7,6 +7,8 @@ import ErrorHandler from '../../HOC/ErrorHandler/ErrorHandler';
 import Input from '../../Components/UI/Input/Input';
 import Modal from '../../Components/UI/Modal/Modal';
 
+import { checkValidity } from '../Validation/Validation';
+
 import * as actionTypes from '../../store/actions/index';
 
 import { connect } from 'react-redux';
@@ -18,22 +20,20 @@ class ContactData extends Component {
             name: {
                 ...this.inputConfig('input', 'text', 'Your name')
             },
-            email: {
-                ...this.inputConfig('input', 'email', 'Your Email')
-            },
             street: {
                 ...this.inputConfig('input', 'text', 'Street')
             },
             postal: {
-                ...this.inputConfig('input', 'text', 'Postal Code')
+                ...this.inputConfig('input', 'text', 'Zip Code')
             },
-            deliverMethod: {
-                ...this.inputConfig('select', 'text', 'Delivery Method'),
-                options: [
-                    { value: 'fastest', displayValue: 'Fastest' },
-                    { value: 'cheapest', displayValue: 'Cheapest' },
-                ]
-            }
+            // deliverMethod: {
+            //     ...this.inputConfig('select', 'text', 'Delivery Method'),
+            //     options: [
+            //         { value: '', displayValue: 'Delivery Method', disabled: true, hidden: true, selected: true },
+            //         { value: 'fastest', displayValue: 'Fastest' },
+            //         { value: 'cheapest', displayValue: 'Cheapest' },
+            //     ]
+            // }
         },
         formIsValid: false,
         showModal: false
@@ -46,12 +46,12 @@ class ContactData extends Component {
                 type,
                 placeholder
             },
-            value: elType === 'select' ? 'fastest' : '',
+            value: '',
             rules: {
                 required: true,
-                isEmail: type === 'email' ? true : false
+                isNumeric: placeholder === 'Zip Code' ? true : false
             },
-            valid: elType === 'select' ? true : false,
+            valid: false,
             touched: false
         }
     }
@@ -61,32 +61,16 @@ class ContactData extends Component {
         const updatedFormElement = { ...updatedForm[inputId] };
 
         updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.rules);
+        updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.rules);
         updatedFormElement.touched = true;
 
         let formIsValid = true;
         for (let inputId in updatedForm) {
             formIsValid = updatedForm[inputId].valid && formIsValid;
         }
-        console.log(formIsValid);
         updatedForm[inputId] = updatedFormElement;
 
         this.setState({ orderForm: updatedForm, formIsValid });
-    }
-
-    checkValidity = (value, rules) => {
-        let isValid = true;
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        return isValid;
     }
 
     orderConfirmedHandler = (event) => {
@@ -105,7 +89,8 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            orderDetails
+            orderDetails,
+            userId: this.props.userId
         };
 
         this.props.onOrder(order, this.props.history);
@@ -160,7 +145,8 @@ const mapStateToProps = state => {
         ingredients: state.pizzaBuilder.ingredients,
         price: state.pizzaBuilder.totalPrice,
         loading: state.order.loading,
-        isAuth: state.auth.idToken
+        isAuth: state.auth.idToken,
+        userId: state.auth.userId
     }
 }
 
