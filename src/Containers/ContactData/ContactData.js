@@ -23,6 +23,9 @@ class ContactData extends Component {
             street: {
                 ...this.inputConfig('input', 'text', 'Street')
             },
+            phone: {
+                ...this.inputConfig('input', 'text', 'Phone')
+            },
             postal: {
                 ...this.inputConfig('input', 'text', 'Zip Code')
             },
@@ -49,7 +52,8 @@ class ContactData extends Component {
             value: '',
             rules: {
                 required: true,
-                isNumeric: placeholder === 'Zip Code' ? true : false
+                isNumeric: placeholder === 'Zip Code' ? true : false,
+                isPhone: placeholder === 'Phone' ? true : false
             },
             valid: false,
             touched: false

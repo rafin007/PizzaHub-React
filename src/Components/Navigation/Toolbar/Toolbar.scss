@@ -33,6 +33,28 @@
 
     .Menu {
         display: block;
+
+        &__icon {
+            width: 3rem;
+            border-bottom: 3px solid #fff;
+
+            &::before {
+                content: "";
+                border-bottom: 3px solid #fff;
+                position: absolute;
+                top: 3rem;
+                width: 3rem;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 1.5rem;
+                left: 2rem;
+                border-bottom: 3px solid #fff;
+                width: 3rem;
+            }
+        }
     }
 
     .Toolbar {
